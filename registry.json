@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-03-10T08:17:09Z",
+  "total": 2,
+  "categories": [
+    "other",
+    "productivity"
+  ],
+  "skills": [
+    {
+      "id": "daily-news-briefing",
+      "name": "daily-news-briefing",
+      "description": "搜索今日行业新闻，整理成结构化简报并发送到指定邮箱",
+      "version": "1.0.0",
+      "author": "ChatableX",
+      "category": "productivity",
+      "tool_ids": [
+        "google-search",
+        "email-sender"
+      ],
+      "variables": [
+        "topic",
+        "email",
+        "count"
+      ],
+      "has_scripts": true,
+      "has_references": true,
+      "has_assets": true,
+      "file_count": 4,
+      "total_size": 2128
+    },
+    {
+      "id": "hello-world",
+      "name": "hello-world",
+      "description": "最简单的 Skill 示例，向用户打招呼并介绍 ChatableX Skills 系统",
+      "version": "1.0.0",
+      "author": "ChatableX",
+      "category": "other",
+      "tool_ids": [],
+      "variables": [
+        "username"
+      ],
+      "has_scripts": false,
+      "has_references": false,
+      "has_assets": false,
+      "file_count": 1,
+      "total_size": 733
+    }
+  ]
+}
