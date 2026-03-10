@@ -327,12 +327,14 @@ review        审核暂存区，所有 PR 的合并目标
 
 | 检查项 | 说明 | 必须通过 |
 |--------|------|---------|
-| **Frontmatter 校验** | `name`、`description`、`version` 必填 | 是 |
-| **目录结构校验** | 必须包含 `SKILL.md`，不允许非标准顶层文件 | 是 |
+| **Frontmatter 校验** | `name`、`description` 必填 | 是 |
+| **SKILL.md 存在** | 必须包含 `SKILL.md` 文件 | 是 |
 | **文件大小检查** | 单文件 < 1MB，Skill 文件夹 < 5MB | 是 |
 | **YAML 语法检查** | Frontmatter 是合法的 YAML | 是 |
 | **scripts/ lint** | Python 文件基础语法检查（如有） | 是 |
 | **安全扫描** | 检查 scripts/ 中是否有危险操作 | 是 |
+
+> 顶层文件不做限制，你可以在 Skill 文件夹中放 LICENSE、README 等额外文件。
 
 ---
 

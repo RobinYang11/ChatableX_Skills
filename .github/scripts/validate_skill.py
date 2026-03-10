@@ -19,8 +19,7 @@ import yaml
 
 MAX_FILE_SIZE = 1 * 1024 * 1024  # 1 MB
 MAX_SKILL_SIZE = 5 * 1024 * 1024  # 5 MB
-REQUIRED_FIELDS = ["name", "description", "version"]
-ALLOWED_SUBDIRS = {"scripts", "references", "assets"}
+REQUIRED_FIELDS = ["name", "description"]
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 
 
@@ -60,12 +59,8 @@ def validate_skill(skill_dir: Path) -> list[str]:
     if total_size > MAX_SKILL_SIZE:
         errors.append(f"Skill folder exceeds 5MB ({total_size / 1024 / 1024:.1f}MB)")
 
-    # Check top-level files and directories
-    for item in skill_dir.iterdir():
-        if item.is_dir() and item.name not in ALLOWED_SUBDIRS:
-            errors.append(f"Unexpected directory: {item.name}/ (allowed: {', '.join(ALLOWED_SUBDIRS)})")
-        if item.is_file() and item.name != "SKILL.md":
-            errors.append(f"Unexpected top-level file: {item.name} (only SKILL.md allowed at top level)")
+    # No restriction on top-level files or directories — users can include
+    # LICENSE, README, extra docs, etc. alongside SKILL.md.
 
     # Parse frontmatter
     content = skill_md.read_text(encoding="utf-8")
