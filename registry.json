@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-03-11T07:12:08Z",
-  "total": 3,
+  "generated_at": "2026-03-11T07:17:16Z",
+  "total": 4,
   "categories": [
+    "data",
     "other",
     "productivity"
   ],
@@ -27,6 +28,21 @@
       "has_assets": true,
       "file_count": 4,
       "total_size": 2128
+    },
+    {
+      "id": "data-visualization",
+      "name": "data-visualization",
+      "description": "Use this skill whenever the user asks to create charts, graphs, plots, dashboards, or any data visualization. This includes: pie charts, bar charts, line charts, scatter plots, heatmaps, treemaps, sunburst charts, histograms, box plots, funnel charts, gauges, geographic maps, candlestick charts, radar charts, sankey diagrams, and any other visual representation of data. Also activate when the user asks to 'visualize', 'plot', 'graph', 'chart', or 'show me a chart of' any data — whether from CSV, Excel, JSON, database results, or inline data in the conversation.",
+      "version": "1.0.0",
+      "author": "ChatableX",
+      "category": "data",
+      "tool_ids": [],
+      "variables": [],
+      "has_scripts": false,
+      "has_references": false,
+      "has_assets": false,
+      "file_count": 1,
+      "total_size": 10210
     },
     {
       "id": "hello-world",
