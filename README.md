@@ -12,6 +12,8 @@ ChatableX 官方技能仓库 —— 社区贡献的 AI Agent 技能集合。
 - [Skill 文件夹结构](#skill-文件夹结构)
 - [SKILL.md 规范](#skillmd-规范)
   - [Frontmatter 字段说明](#frontmatter-字段说明)
+  - [内置变量（系统自动注入）](#内置变量系统自动注入)
+  - [文件输出规范](#文件输出规范)
   - [Markdown 正文规范](#markdown-正文规范)
 - [子目录说明](#子目录说明)
 - [发布方式](#发布方式)
@@ -127,6 +129,10 @@ variables:
 | `category` | string | 推荐 | 分类标签，可选值见下方 |
 | `tool_ids` | string[] | 可选 | 引用的外部工具 ID 列表，安装时自动检查依赖 |
 | `variables` | object[] | 可选 | 可配置参数列表，安装后用户可填写 |
+| `dependencies` | object | 可选 | 依赖声明，激活时自动安装。子字段：`python`、`node`、`system` |
+| `scripts` | object[] | 可选 | 自带脚本工具声明。子字段：`entry`（入口文件）、`tools`（工具函数名列表） |
+| `references` | object[] | 可选 | 参考文档声明。子字段：`path`、`preload`（是否预加载）、`description` |
+| `assets` | object[] | 可选 | 资源文件声明。子字段：`path`、`type`、`description` |
 
 **category 可选值**：
 
@@ -155,6 +161,67 @@ variables:
         label: "科技"
       - value: "finance"
         label: "金融"
+```
+
+### 内置变量（系统自动注入）
+
+除了用户自定义的 `variables`，系统会自动注入以下内置变量，Skill 作者可以直接在正文中使用：
+
+| 变量 | 值 | 说明 |
+|------|-----|------|
+| `{{output_dir}}` | `~/.ChatableX/workspace/outputs/{skill_id}/` | Skill 专属输出目录（已预创建） |
+| `{{workspace_dir}}` | `~/.ChatableX/workspace/` | 工作区根目录 |
+
+> 如果用户通过 `variables` 传入了同名变量（如自定义 `output_dir`），用户值优先。
+
+**使用示例**：
+
+```python
+# 在代码模板中引用 output_dir
+OUTPUT_DIR = '{{output_dir}}'
+output = os.path.join(OUTPUT_DIR, 'report.html')
+fig.write_html(output)
+print(output)
+```
+
+### 文件输出规范
+
+如果你的 Skill 需要生成文件（图表、Excel、PDF 等），**必须** 遵循以下规则，否则生成的文件不会在聊天中显示：
+
+**三条铁律**：
+
+1. **用 `{{output_dir}}`** —— 不要硬编码路径，使用系统注入的 `{{output_dir}}` 变量
+2. **`print()` 绝对路径** —— 脚本执行后，必须将文件的绝对路径用 `print()` 单独输出一行
+3. **使用已知扩展名** —— 文件扩展名必须是系统能识别的类型（`.html`、`.xlsx`、`.csv`、`.png`、`.pdf`、`.pptx` 等）
+
+**为什么？**
+
+ChatableX 的文件显示链路：
+
+```
+脚本 print(绝对路径)
+  → execute_shell 扫描 stdout 中的文件路径
+  → FileManager 注册 → 分配 file_id
+  → 聊天 UI 显示文件卡片（或内联渲染 HTML 图表）
+```
+
+如果 `print()` 缺失、路径是相对路径、或路径混在其他文本中，文件将不会被检测到。
+
+**正确示例**：
+
+```python
+OUTPUT_DIR = '{{output_dir}}'
+output = os.path.join(OUTPUT_DIR, '分析报告.html')
+fig.write_html(output)
+print(output)  # ✅ 绝对路径，单独一行
+```
+
+**错误示例**：
+
+```python
+fig.write_html('report.html')       # ❌ 相对路径
+print(f"Saved to {output}, done!")  # ❌ 路径混在其他文本中
+fig.write_html(output)               # ❌ 没有 print
 ```
 
 ### Markdown 正文规范
